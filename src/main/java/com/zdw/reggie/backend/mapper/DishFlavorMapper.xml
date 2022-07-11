@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zdw.reggie.backend.mapper.DishFlavorMapper">
+    <delete id="delete" >
+        delete from dish_flavor
+        where dish_id=#{id}
+    </delete>
+
+
+    <update id="updata" parameterType="com.zdw.reggie.backend.domain.DishFlavor">
+        update dish_flavor
+        <set>
+
+            <if test="name != null and name!= ''">
+                name =#{name},
+            </if>
+            <if test="value !=null and value!=''">
+                value=#{value},
+            </if>
+            <if test="dishId!=null and dishId!=''">
+                dish_id=#{dishId},
+            </if>
+            <if test="updateTime !=null">
+                update_time=#{updateTime},
+            </if>
+            <if test="updateUser !=null">
+                update_user=#{updateUser},
+            </if>
+            <if test="isDeleted !=null">
+                is_deleted=#{isDeleted}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <select id="selectDishById" resultType="com.zdw.reggie.backend.domain.DishFlavor">
+        select *
+        from dish_flavor
+        where  dish_id=#{id}
+    </select>
+
+    <insert id="insertFlacor" parameterType="com.zdw.reggie.backend.domain.DishFlavor">
+        insert into dish_flavor(
+            id,
+            dish_id,
+            name,
+            value,
+            create_time,
+            update_time,
+            create_user,
+            update_user,
+            is_deleted
+        )values (
+             #{id},
+             #{dishId},
+             #{name},
+             #{value},
+             #{createTime},
+             #{updateTime},
+             #{createUser},
+             #{updateUser},
+             #{isDeleted}
+                        )
+    </insert>
+
+</mapper>

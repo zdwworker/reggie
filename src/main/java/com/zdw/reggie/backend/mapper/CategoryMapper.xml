@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zdw.reggie.backend.mapper.CategoryMapper">
+
+    <select id="getCategoryName"
+            parameterType="com.zdw.reggie.backend.domain.Category"
+            resultType="com.zdw.reggie.backend.domain.Category">
+        select *
+        from category
+        <where>
+            <if test="type!=null ">
+                type =#{type}
+            </if>
+        </where>
+
+    </select>
+
+    <insert id="insertCategory" parameterType="com.zdw.reggie.backend.domain.Category">
+        insert into category (id, type, name,
+                              sort, create_time, update_time,
+                              create_user, update_user)
+        values (#{id,jdbcType=BIGINT}, #{type,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
+                #{sort,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+                #{createUser,jdbcType=BIGINT}, #{updateUser,jdbcType=BIGINT})
+    </insert>
+
+    <select id="selectCategoryByPage" resultType="com.zdw.reggie.backend.domain.Category">
+        select *
+        from category
+        limit  #{pageNo},#{pageSize}
+    </select>
+    <select id="selectCont" resultType="int">
+        select count(*)
+        from category
+    </select>
+
+    <delete id="delect"  >
+        delete
+        from  category
+        where id=#{ids}
+    </delete>
+
+    <update id="updata" parameterType="com.zdw.reggie.backend.domain.Category">
+
+        update category
+        <set>
+            <if test="type !=null and type!=''">
+                  type=#{type},
+            </if>
+            <if test="name!=null and name!=''">
+                name=#{name},
+            </if>
+            <if test="sort!=null and sort!=''">
+                sort=#{sort},
+            </if>
+            <if test="updateTime!=null ">
+                update_time=#{updateTime},
+            </if>
+            <if test="updateUser!=null ">
+                update_user=#{updateUser},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+</mapper>

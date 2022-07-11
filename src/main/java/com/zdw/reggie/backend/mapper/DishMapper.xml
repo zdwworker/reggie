@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zdw.reggie.backend.mapper.DishMapper">
+
+    <select id="selectDishByCategoryId" resultType="com.zdw.reggie.backend.dto.DishDto">
+        select *
+        from dish
+        where
+              category_id=#{categoryId} and status=1
+    </select>
+
+    <delete id="delete">
+        delete from dish
+        where id=#{id}
+    </delete>
+
+    <update id="updataStatus" >
+        update  dish
+        set
+            status=#{status}
+        where id=#{id}
+    </update>
+    <update id="updata" parameterType="com.zdw.reggie.backend.dto.DishDto">
+        update dish
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="categoryId != null and categoryId != ''">
+                category_id = #{categoryId},
+            </if>
+            <if test="categoryName != null and categoryName != ''">
+                category_name = #{categoryName},
+            </if>
+            <if test="price != null and price != ''">
+                price = #{price},
+            </if>
+            <if test="code != null and code != ''">
+                code = #{code},
+            </if>
+            <if test="image != null and image!=''">
+                image = #{image},
+            </if>
+            <if test="description != null and description!=''">
+                description = #{description},
+            </if>
+            <if test="status != null ">
+                status = #{status},
+            </if>
+            <if test="sort != null ">
+                sort = #{sort},
+            </if>
+            <if test="updateTime != null ">
+                update_time = #{updateTime},
+            </if>
+            <if test="updateUser != null ">
+                update_user = #{updateUser},
+            </if>
+            <if test="isDeleted != null ">
+                is_deleted = #{isDeleted}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="selectDishById" resultType="com.zdw.reggie.backend.dto.DishDto">
+        select *
+        from dish
+        where id=#{id}
+    </select>
+
+    <insert id="insertDish" parameterType="com.zdw.reggie.backend.dto.DishDto">
+        insert into dish(
+            id,
+            name,
+            category_id,
+            price,
+            code,
+            image,
+            description,
+            status,
+            sort,
+            create_time,
+            update_time,
+            create_user,
+            update_user,
+            is_deleted
+        )values (
+             #{id},
+             #{name},
+             #{categoryId},
+             #{price},
+             #{code},
+             #{image},
+             #{description},
+             #{status},
+             #{sort},
+             #{createTime},
+             #{updateTime},
+             #{createUser},
+             #{updateUser},
+             #{isDeleted}
+                        )
+    </insert>
+
+    <select id="selectCont" resultType="int">
+        select count(*)
+        from dish
+        where category_id=#{ids}
+    </select>
+
+    <select id="selectDishByPage" resultType="com.zdw.reggie.backend.domain.Dish">
+        select
+        d.id,
+        d.name,
+        c.name as categoryName,
+        d.price,
+        d.code,
+        d.image,
+        d.description,
+        d.status,
+        d.sort,
+        d.create_time,
+        d.update_time,
+        d.create_user,
+        d.update_user,
+        d.is_deleted
+
+        from dish as d
+        join category as c
+        on d.category_id=c.id
+        <where>
+            <if test="name!=null and name!=''">
+                d.name like '%' #{name} '%'
+            </if>
+        </where>
+        limit  #{pageNo},#{pageSize}
+    </select>
+
+    <select id="selectContByname" resultType="int">
+        select count(*)
+        from dish
+        <where>
+            <if test="name!=null and name!=''">
+                name like '%' #{name} '%'
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zdw.reggie.backend.mapper.SetmealMapper">
+
+        <select id="selectSetmeal" parameterType="com.zdw.reggie.backend.domain.Setmeal" resultType="com.zdw.reggie.backend.dto.SetmealDto">
+            select *
+            from setmeal
+            where
+                category_id=#{categoryId} and status=#{status}
+        </select>
+
+        <delete id="delete" >
+            delete from setmeal
+            where id=#{id}
+        </delete>
+
+        <update id="updataStatus" >
+            update setmeal
+            set
+                status=#{status}
+            where id=#{id}
+        </update>
+
+        <update id="updata" parameterType="com.zdw.reggie.backend.dto.SetmealDto">
+            update setmeal
+            <set>
+                <if test="categoryId !=null and categoryId!='' ">
+                    category_id=#{categoryId},
+                </if>
+                <if test="name!=null and name!=''">
+                    name=#{name},
+                </if>
+                <if test="price!=null and price!=''">
+                    price=#{price},
+                </if>
+                <if test="image!=null and image!=''">
+                    image=#{image},
+                </if>
+                <if test="description!=null and description!=''">
+                    description=#{description},
+                </if>
+                <if test="updateTime!=null ">
+                    update_time=#{updateTime},
+                </if>
+                <if test="updateUser!=null ">
+                    update_user=#{updateUser}
+                </if>
+            </set>
+                where id=#{id}
+        </update>
+
+        <select id="selectById" resultType="com.zdw.reggie.backend.dto.SetmealDto">
+            select *
+            from setmeal
+            where id=#{id}
+        </select>
+
+        <select id="selectByPage" resultType="com.zdw.reggie.backend.domain.Setmeal">
+            select
+            s.id,
+            s.category_id,
+            c.name as categoryName,
+            s.name,
+            s.price,
+            s.status,
+            s.code,
+            s.description,
+            s.image,
+            s.create_time,
+            s.update_time,
+            s.create_user,
+            s.update_user,
+            s.is_deleted
+            from setmeal as s
+            join category as c
+            on s.category_id=c.id
+            <where>
+                <if test="name !=null and name!=''">
+                    name like '%' #{name} '%'
+                </if>
+            </where>
+            limit #{pageNo},#{pageSize}
+        </select>
+
+        <select id="selectConts" resultType="int">
+            select count(*)
+            from setmeal
+            <where>
+                <if test="name!=null and name!=''">
+                    name like '%' #{name} '%'
+                </if>
+            </where>
+        </select>
+
+        <select id="selectCont" resultType="int">
+            select count(*)
+            from setmeal
+            where category_id=#{ids}
+        </select>
+
+    <insert id="insertSetmeal" parameterType="com.zdw.reggie.backend.dto.SetmealDto">
+        insert into setmeal(
+            id,
+            category_id,
+            name,
+            price,
+            status,
+            code,
+            description,
+            image,
+            create_time,
+            update_time,
+            create_user,
+            update_user,
+            is_deleted
+        )values (
+            #{id},
+            #{categoryId},
+            #{name},
+            #{price},
+            #{status},
+            #{code},
+            #{description},
+            #{image},
+            #{createTime},
+            #{updateTime},
+            #{createUser},
+            #{updateUser},
+            #{isDeleted}
+                        )
+    </insert>
+</mapper>
